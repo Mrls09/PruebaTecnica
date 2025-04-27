@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rocket_code.pruebatecnica.mapper.MedicalRecordMapper">
+
+    <resultMap id="MedicalRecordResult" type="com.rocket_code.pruebatecnica.entity.MedicalRecord">
+        <id property="id" column="id"/>
+        <result property="diagnosis" column="diagnosis"/>
+        <result property="treatment" column="treatment"/>
+        <result property="date" column="record_date"/>
+        <result property="appointmentId" column="appointment_id"/>
+        <association property="appointment" column="appointment_id" select="com.rocket_code.pruebatecnica.mapper.MedicalAppointmentMapper.findById"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="MedicalRecordResult">
+        SELECT * FROM medical_record
+    </select>
+
+    <select id="findById" resultMap="MedicalRecordResult">
+        SELECT * FROM medical_record WHERE id = #{id}
+    </select>
+
+    <select id="findByPatientId" resultMap="MedicalRecordResult">
+        SELECT mr.*
+        FROM medical_record mr
+                 JOIN medical_appointment ma ON mr.appointment_id = ma.id
+        WHERE ma.patient_id = #{patientId}
+    </select>
+
+    <select id="findByDoctorId" resultMap="MedicalRecordResult">
+        SELECT mr.*
+        FROM medical_record mr
+                 JOIN medical_appointment ma ON mr.appointment_id = ma.id
+        WHERE ma.doctor_id = #{doctorId}
+    </select>
+
+    <insert id="insert" parameterType="com.rocket_code.pruebatecnica.entity.MedicalRecord">
+        INSERT INTO medical_record (id, diagnosis, treatment, record_date, appointment_id)
+        VALUES (medical_record_seq.NEXTVAL, #{diagnosis}, #{treatment}, #{date}, #{appointment.id})
+    </insert>
+
+    <update id="update" parameterType="com.rocket_code.pruebatecnica.entity.MedicalRecord">
+        UPDATE medical_record
+        SET diagnosis = #{diagnosis},
+            treatment = #{treatment},
+            record_date = #{date},
+            appointment_id = #{appointment.id}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM medical_record WHERE id = #{id}
+    </delete>
+
+</mapper>

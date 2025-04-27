@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rocket_code.pruebatecnica.mapper.MedicalAppointmentMapper">
+
+    <resultMap id="MedicalAppointmentResult" type="com.rocket_code.pruebatecnica.entity.MedicalAppointment">
+        <id property="id" column="id"/>
+        <result property="appointmentDate" column="appointment_date"/>
+        <result property="doctorId" column="doctor_id"/>
+        <result property="patientId" column="patient_id"/>
+        <association property="doctor" column="doctor_id" select="com.rocket_code.pruebatecnica.mapper.DoctorMapper.findById"/>
+        <association property="patient" column="patient_id" select="com.rocket_code.pruebatecnica.mapper.PatientMapper.findById"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="MedicalAppointmentResult">
+        SELECT * FROM medical_appointment
+    </select>
+
+    <select id="findById" resultMap="MedicalAppointmentResult">
+        SELECT * FROM medical_appointment WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.rocket_code.pruebatecnica.entity.MedicalAppointment">
+        INSERT INTO medical_appointment (id, appointment_date, doctor_id, patient_id)
+        VALUES (medical_appointment_seq.NEXTVAL, #{appointmentDate}, #{doctor.id}, #{patient.id})
+    </insert>
+
+    <update id="update" parameterType="com.rocket_code.pruebatecnica.entity.MedicalAppointment">
+        UPDATE medical_appointment
+        SET appointment_date = #{appointmentDate},
+            doctor_id = #{doctor.id},
+            patient_id = #{patient.id}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM medical_appointment WHERE id = #{id}
+    </delete>
+
+</mapper>

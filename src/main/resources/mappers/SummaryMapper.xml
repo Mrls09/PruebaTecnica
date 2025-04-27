@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rocket_code.pruebatecnica.mapper.SummaryMapper">
+
+    <resultMap id="SummaryResult" type="com.rocket_code.pruebatecnica.entity.Summary">
+        <id property="id" column="id"/>
+        <result property="diagnosis" column="diagnosis"/>
+        <result property="treatment" column="treatment"/>
+        <result property="medicalAppointmentId" column="medical_appointment_id"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="SummaryResult">
+        SELECT * FROM summary
+    </select>
+
+    <select id="findById" resultMap="SummaryResult">
+        SELECT * FROM summary WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.rocket_code.pruebatecnica.entity.Summary">
+        INSERT INTO summary (id, diagnosis, treatment, medical_appointment_id)
+        VALUES (summary_seq.NEXTVAL, #{diagnosis}, #{treatment}, #{medicalAppointmentId})
+    </insert>
+
+    <update id="update" parameterType="com.rocket_code.pruebatecnica.entity.Summary">
+        UPDATE summary
+        SET diagnosis = #{diagnosis},
+            treatment = #{treatment},
+            medical_appointment_id = #{medicalAppointmentId}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM summary WHERE id = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rocket_code.pruebatecnica.mapper.PatientMapper">
+    <!-- Consultar un paciente por su ID -->
+    <select id="findById" resultType="com.rocket_code.pruebatecnica.entity.Patient">
+        SELECT id, name, age, medical_history
+        FROM patient
+        WHERE id = #{id}
+    </select>
+
+    <!-- Consultar todos los pacientes -->
+    <select id="findAll" resultType="com.rocket_code.pruebatecnica.entity.Patient">
+        SELECT id, name, age, medical_history
+        FROM patient
+    </select>
+
+    <!-- Insertar un nuevo paciente -->
+    <insert id="insert" parameterType="com.rocket_code.pruebatecnica.entity.Patient">
+        INSERT INTO patient (name, age, medical_history)
+        VALUES (#{name}, #{age}, #{medical_history})
+    </insert>
+
+    <!-- Actualizar un paciente existente -->
+    <update id="update" parameterType="com.rocket_code.pruebatecnica.entity.Patient">
+        UPDATE patient
+        SET name = #{name}, age = #{age}, medical_history = #{medical_history}
+        WHERE id = #{id}
+    </update>
+
+    <!-- Eliminar un paciente por su ID -->
+    <delete id="delete" parameterType="Long">
+        DELETE FROM patient
+        WHERE id = #{id}
+    </delete>
+</mapper>

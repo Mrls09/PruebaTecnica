@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rocket_code.pruebatecnica.mapper.DoctorMapper">
+    <!-- Consultar un doctor por su ID -->
+    <select id="findById" resultType="com.rocket_code.pruebatecnica.entity.Doctor">
+        SELECT id, name, specialty
+        FROM doctor
+        WHERE id = #{id}
+    </select>
+
+    <!-- Consultar todos los doctores -->
+    <select id="findAll" resultType="com.rocket_code.pruebatecnica.entity.Doctor">
+        SELECT id, name, specialty
+        FROM DOCTOR
+    </select>
+
+    <!-- Insertar un nuevo doctor -->
+    <insert id="insert" parameterType="com.rocket_code.pruebatecnica.entity.Doctor">
+        INSERT INTO doctor (name, specialty)
+        VALUES (#{name}, #{specialty})
+    </insert>
+
+    <!-- Actualizar un doctor existente -->
+    <update id="update" parameterType="com.rocket_code.pruebatecnica.entity.Doctor">
+        UPDATE doctor
+        SET name = #{name}, specialty = #{specialty}
+        WHERE id = #{id}  <!-- Cambiado de uuid a id -->
+    </update>
+
+    <!-- Eliminar un doctor por su ID -->
+    <delete id="delete" parameterType="long">
+        DELETE FROM doctor
+        WHERE id = #{id} <!-- Cambiado de uuid a id -->
+    </delete>
+</mapper>

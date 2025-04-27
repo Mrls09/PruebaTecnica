@@ -1,14 +1,12 @@
-package com.rocket_code.pruebatecnica.entity.doctor;
-
-import java.util.UUID;
+package com.rocket_code.pruebatecnica.entity;
 
 public class Doctor {
-    private UUID uuid;
+    private Long id;
     private String name;
     private String specialty;
 
-    public Doctor(UUID uuid, String specialty, String name) {
-        this.uuid = uuid;
+    public Doctor(Long id, String specialty, String name) {
+        this.id = id;
         this.specialty = specialty;
         this.name = name;
     }
@@ -16,12 +14,11 @@ public class Doctor {
     public Doctor() {
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public Long getId() {
+        return id;
     }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
