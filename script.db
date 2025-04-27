@@ -1,0 +1,130 @@
+
+CREATE TABLE doctor (
+    id NUMBER(19) PRIMARY KEY,
+    name VARCHAR2(255) NOT NULL,
+    specialty VARCHAR2(255)
+);
+
+CREATE SEQUENCE doctor_seq
+START WITH 1
+INCREMENT BY 1
+NOCACHE
+NOCYCLE;
+
+CREATE OR REPLACE TRIGGER doctor_before_insert
+BEFORE INSERT ON doctor
+FOR EACH ROW
+BEGIN
+    IF :NEW.id IS NULL THEN
+        SELECT doctor_seq.NEXTVAL INTO :NEW.id FROM dual;
+    END IF;
+END;
+
+CREATE TABLE patient (
+    id NUMBER(19) PRIMARY KEY,
+    name VARCHAR2(255) NOT NULL,
+    age INTEGER NOT NULL,
+    medical_history VARCHAR2(255)
+);
+
+CREATE SEQUENCE patient_seq
+START WITH 1
+INCREMENT BY 1
+NOCACHE
+NOCYCLE;
+
+CREATE OR REPLACE TRIGGER patient_before_insert
+BEFORE INSERT ON patient
+FOR EACH ROW
+BEGIN
+    IF :NEW.id IS NULL THEN
+        SELECT patient_seq.NEXTVAL INTO :NEW.id FROM dual;
+    END IF;
+END;
+
+CREATE TABLE medical_appointment (
+    id NUMBER(19) PRIMARY KEY,
+    doctor_id NUMBER(19) NOT NULL,
+    patient_id NUMBER(19) NOT NULL,
+    appointment_date TIMESTAMP NOT NULL,
+    CONSTRAINT fk_medical_appointment_doctor FOREIGN KEY (doctor_id) REFERENCES doctor(id),
+    CONSTRAINT fk_medical_appointment_patient FOREIGN KEY (patient_id) REFERENCES patient(id)
+);
+
+CREATE SEQUENCE medical_appointment_seq
+START WITH 1
+INCREMENT BY 1
+NOCACHE
+NOCYCLE;
+
+CREATE OR REPLACE TRIGGER medical_appointment_before_insert
+BEFORE INSERT ON medical_appointment
+FOR EACH ROW
+BEGIN
+    IF :NEW.id IS NULL THEN
+        SELECT medical_appointment_seq.NEXTVAL INTO :NEW.id FROM dual;
+    END IF;
+END;
+/
+
+CREATE TABLE summary (
+    id NUMBER(19) PRIMARY KEY,
+    diagnosis VARCHAR2(255),
+    treatment VARCHAR2(255)
+);
+
+CREATE SEQUENCE summary_seq
+START WITH 1
+INCREMENT BY 1
+NOCACHE
+NOCYCLE;
+
+CREATE OR REPLACE TRIGGER summary_before_insert
+BEFORE INSERT ON summary
+FOR EACH ROW
+BEGIN
+    IF :NEW.id IS NULL THEN
+        SELECT summary_seq.NEXTVAL INTO :NEW.id FROM dual;
+    END IF;
+END;
+
+CREATE SEQUENCE medical_record_seq
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
+CREATE TABLE medical_record (
+  id NUMBER PRIMARY KEY,
+  diagnosis VARCHAR2(500) NOT NULL,
+  treatment VARCHAR2(500) NOT NULL,
+  record_date TIMESTAMP NOT NULL,
+  appointment_id NUMBER NOT NULL,
+  CONSTRAINT fk_appointment
+    FOREIGN KEY (appointment_id)
+    REFERENCES medical_appointment(id)
+);
+
+CREATE INDEX idx_medical_record_appointment ON medical_record(appointment_id);
+
+CREATE SEQUENCE medical_appointment_seq
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
+CREATE TABLE medical_appointment (
+  id NUMBER PRIMARY KEY,
+  appointment_date TIMESTAMP NOT NULL,
+  doctor_id NUMBER NOT NULL,
+  patient_id NUMBER NOT NULL,
+  CONSTRAINT fk_doctor
+    FOREIGN KEY (doctor_id)
+    REFERENCES doctor(id),
+  CONSTRAINT fk_patient
+    FOREIGN KEY (patient_id)
+    REFERENCES patient(id)
+);
+
+CREATE INDEX idx_appointment_doctor ON medical_appointment(doctor_id);
+CREATE INDEX idx_appointment_patient ON medical_appointment(patient_id);
